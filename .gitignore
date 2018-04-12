@@ -2,3 +2,6 @@
 
 /code/data/*
 !/code/data/.gitkeep
+
+/code/.RData
+/code/.Rhistory
