@@ -58,22 +58,30 @@ Can we predict the state of motor by a recorded operation?
 \end{itemize}
 \end{frame}
 \begin{frame}{First Steps}
-\textbf{First problem} --- data is very high-dimensional ($p\approx 10^5$)\\
-\textbf{Solution} --- do PCA first to select the most important moments\\[.4cm]
-\textbf{Then} --- data exploration\\
-For example, do faulty and working operations have the same or different mean, distribution etc
-\end{frame}
-\begin{frame}{Before PCA}
-\textbf{\large Loading data into frame}\\
-\textbf{Problem} --- different lengths of data samples\\
-\textbf{Solution} --- cut all samples to minimal length value
+\begin{itemize} %[<+->]
+\item Loading data
+\begin{itemize}
+\item \textit{Problem} --- data samples have different length
+\item \textit{Solution} --- cut all samples to the length of minimal one\\
+\end{itemize}
+\item Before PCA
+\begin{itemize}
+\item \textit{Problem} --- underdetermined data --- $\approx$1k statistical units with $\approx$100k variables
+\item \textit{Solution} --- downsample data, take every 100th measurement
+\end{itemize}
+\item PCA
+\item Data exploration
+\begin{itemize}
+\item For example, do faulty and working operations have the same or different mean, distribution etc
+\end{itemize}
+\end{itemize}
 \end{frame}
 \begin{frame}{PCA}
 PCA results go here
 \end{frame}
 \begin{frame}{Data Properties}
-\includegraphics[width=6cm, height= 5.5cm]{TorqueMean.png}
-\includegraphics[width=6cm, height=5.5cm]{CurrentMean.png}
+\includegraphics[width=6cm]{TorqueMean.png}
+\includegraphics[width=6cm]{CurrentMean.png}
 \end{frame}
 \begin{frame}{Conclusions}
 What we got so far
