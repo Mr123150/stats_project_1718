@@ -8,6 +8,7 @@
 \usetheme{Dresden}
 \usecolortheme{beaver}
 \setbeamerfont{block title}{size=\normalsize}
+\beamertemplatenavigationsymbolsempty
 \title[Electric motors data analysis]{\huge Electric motors data analysis}
 \author[Snesarevskii, Belli, Biava, Dragi\'c, Kalenova] {{\Large Group 8:\\}Viktor Snesarevskii\\Edoardo Belli\\Guendalina Biava\\Ozrenka Dragi\'c\\Madina Kalenova}
 \date{March-April 2018}
@@ -20,75 +21,88 @@
 		\includegraphics[height=.7cm]{abb.png}
 	\end{flushright}
 \end{frame}
+
 \begin{frame}{Dataset}
 \begin{itemize} %[<+->]
 \item Measurements of torque and current from electric motors
-\item Time-series data with frequency 20KHz
+\item Time-series data with frequency 20KHz (downsampled by a factor \textit{M=100} for real use cases/ease of computation)
 \item Data taken from 5 distinct motors in AC and DC modes
 \item Each data sample is one recorded operation
-\item Operations are recorded while motor is working properly, then a fault is induced and the same operations are recorded again 
-\item In total 1066 AC samples, 924 DC samples
+\item Operations are recorded while the motor is working properly, then a fault is induced and the same operations are recorded again 
+\item 1066 AC samples, 924 DC samples (focusing on the DC for now)
 \end{itemize}
 \end{frame}
-\begin{frame}{Data Example}
-\begin{figure}\centering
-\begin{tabular}{|c|c|}\hline
-\textbf{Torque} & \textbf{Current} \\\hline
-16.693&0.023\\\hline
-16.739&0.019\\\hline
-16.823&0.010\\\hline
-16.810&0.007\\\hline
-16.823&-0.002\\\hline
-16.849&-0.010\\\hline
-16.992&-0.018\\\hline
-17.108&-0.033\\\hline
-17.290&-0.035\\\hline
-17.297&-0.052\\\hline
-\end{tabular}\end{figure}
+
+\begin{frame}{The Dataset}
+\centering
+\includegraphics[width=0.85\textwidth]{multiplot.pdf}
 \end{frame}
-\begin{frame}{Main Goals}
-3 main goals:
+
+\begin{frame}{Final Goals}
+ABB is interested in three main applications:
 \begin{itemize} %[<+->]
 \item {\large Motor Classification}\\
 Can we identify a motor by a recorded operation?
 \item {\large Fault Classification}\\
-Can we group faults?
+Can we group motors by their state (working/faulty)?
 \item {\large Fault Prediction}\\
-Can we predict the state of motor by a recorded operation?
+Can we predict the state of a motor by measuring current and torque during an operation?
 \end{itemize}
 \end{frame}
-\begin{frame}{First Steps}
+
+\begin{frame}{Exploratory Analysis: First Approach}
 \begin{itemize} %[<+->]
-\item Loading data
-\begin{itemize}
-\item \textit{Problem} --- data samples have different length
-\item \textit{Solution} --- cut all samples to the length of minimal one\\
-\end{itemize}
-\item Before PCA
-\begin{itemize}
-\item \textit{Problem} --- underdetermined data --- $\approx$1k statistical units with $\approx$100k variables
-\item \textit{Solution} --- downsample data, take every 100th measurement
-\end{itemize}
-\item PCA
-\item Data exploration
-\begin{itemize}
-\item For example, do faulty and working operations have the same or different mean, distribution etc
-\end{itemize}
+\item {\large Feature Extraction}\\
+Choose a set of features and check if they are statistically significant for the underlying problem ---> to be used later in classification
+\item {\large Our set of features is:}\\
+Mean, Standard Deviation, Mode, Median
 \end{itemize}
 \end{frame}
-\begin{frame}{PCA}
-PCA results go here
+
+\begin{frame}{Scatterplot --- Currents, Binary}
+\centering
+\includegraphics[width=0.75\textwidth]{scattermatrix_currents_bin.pdf}
 \end{frame}
-\begin{frame}{Data Properties --- Means}
-\includegraphics[width=0.5\textwidth]{TorqueMean1.png}
-\includegraphics[width=0.5\textwidth]{CurrentMean2.png}
+
+\begin{frame}{Scatterplot --- Torques, Binary}
+\centering
+\includegraphics[width=0.75\textwidth]{scattermatrix_torques_bin.pdf}
 \end{frame}
-\begin{frame}{Data Properties --- Variances}
-\includegraphics[width=0.5\textwidth]{TorqueVar.png}
-\includegraphics[width=0.5\textwidth]{CurrentVar.png}
+
+\begin{frame}{Scatterplot --- Currents, Multiclass}
+\centering
+\includegraphics[width=0.75\textwidth]{scattermatrix_currents_multi.pdf}
 \end{frame}
+
+\begin{frame}{Scatterplot --- Torques, Multiclass}
+\centering
+\includegraphics[width=0.75\textwidth]{scattermatrix_torques_multi.pdf}
+\end{frame}
+
+\begin{frame}{Exploratory Analysis: Second Approach}
+\begin{itemize} %[<+->]
+\item {\large Principal Component Analysis (time-series data, \textit{p=1524})}\\
+Identify the measurement times where we have maximum variability ---> to be used later for classification/prediction
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Principal Component Analysis: Currents, \textit{p=1524, N=924}}
+\centering
+\includegraphics[width=0.85\textwidth]{n_pc_curr.pdf}
+\end{frame}
+
+\begin{frame}{Principal Component Analysis: Torques, \textit{p=1524, N=924}}
+\centering
+\includegraphics[width=0.85\textwidth]{n_pc_torq.pdf}
+\end{frame}
+
 \begin{frame}{Conclusions}
-What we got so far
+\begin{itemize} 
+\item {\large First Approach}\\
+Further improvements can be made by adding different features and/or transforming the input data, the current feature set doesn't show a clear separation between faulty and working motors.
+\item {\large Second Approach}\\
+Most of the variability can be captured with a relatively low number of components (10/20 vs p=1524).
+\end{itemize}
 \end{frame}
-\frame{\centering\huge Questions?}
+
 \end{document}
